@@ -13,7 +13,7 @@ import scala.collection.mutable
 @SparkCode(uri = "https://github.com/apache/spark/blob/v2.0.0/mllib/src/main/scala/org/apache/spark/ml/feature/CountVectorizer.scala")
 case class CountVectorizerModel(vocabulary: Array[String],
                                 binary: Boolean,
-                                minTf: Double) extends Model {
+                                minTf: Option[Double]) extends Model {
   val dict: Map[String, Int] = vocabulary.zipWithIndex.toMap
 
   def apply(document: Seq[String]): Vector = {
@@ -28,11 +28,17 @@ case class CountVectorizerModel(vocabulary: Array[String],
         tokenCount += 1
     }
 
-    val effectiveMinTF = if (minTf >= 1.0) minTf else tokenCount * minTf
+    val filteredCounts = minTf match {
+      case Some(min) =>
+        val effectiveMinTF = if (min >= 1.0) min else tokenCount * min
+        termCounts.filter(_._2 >= effectiveMinTF)
+      case None => termCounts
+    }
+
     val effectiveCounts = if(binary) {
-      termCounts.filter(_._2 >= effectiveMinTF).map(p => (p._1, 1.0)).toSeq
+      filteredCounts.map(p => (p._1, 1.0)).toSeq
     } else {
-      termCounts.filter(_._2 >= effectiveMinTF).toSeq
+      filteredCounts.toSeq
     }
 
     Vectors.sparse(dict.size, effectiveCounts)

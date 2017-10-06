@@ -6,7 +6,7 @@ import org.scalatest.FunSpec
 class CountVectorizerModelSpec extends FunSpec {
 
   describe("binarizer with one input") {
-    val model = new CountVectorizerModel(Array("1", "2", "3"), true, 2)
+    val model = new CountVectorizerModel(Array("1", "2", "3"), true, Some(2))
 
     it("has the right input schema") {
       assert(model.inputSchema.fields ==

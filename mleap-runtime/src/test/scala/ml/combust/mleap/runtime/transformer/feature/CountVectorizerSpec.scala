@@ -11,7 +11,7 @@ class CountVectorizerSpec extends FunSpec {
       val transformer = CountVectorizer(shape = NodeShape().
                     withStandardInput("input").
               withStandardOutput("output"),
-        model = new CountVectorizerModel(Array("1", "2", "3"), true, 2))
+        model = new CountVectorizerModel(Array("1", "2", "3"), true, Some(2)))
       assert(transformer.schema.fields ==
         Seq(StructField("input", ListType(BasicType.String)),
           StructField("output", TensorType.Double(3))))

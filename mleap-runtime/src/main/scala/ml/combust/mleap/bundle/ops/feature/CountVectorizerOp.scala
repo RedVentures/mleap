@@ -21,14 +21,14 @@ class CountVectorizerOp extends MleapOp[CountVectorizer, CountVectorizerModel] {
                       (implicit context: BundleContext[MleapContext]): Model = {
       model.withValue("vocabulary", Value.stringList(obj.vocabulary)).
         withValue("binary", Value.boolean(obj.binary)).
-        withValue("min_tf", Value.double(obj.minTf))
+        withValue("min_tf", obj.minTf.map(Value.double))
     }
 
     override def load(model: Model)
                      (implicit context: BundleContext[MleapContext]): CountVectorizerModel = {
       CountVectorizerModel(vocabulary = model.value("vocabulary").getStringList.toArray,
         binary = model.value("binary").getBoolean,
-        minTf = model.value("min_tf").getDouble)
+        minTf = model.getValue("min_tf").map(_.getDouble))
     }
   }
 

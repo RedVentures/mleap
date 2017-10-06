@@ -25,10 +25,14 @@ class CountVectorizerOp extends SimpleSparkOp[CountVectorizerModel] {
 
     override def load(model: Model)
                      (implicit context: BundleContext[SparkBundleContext]): CountVectorizerModel = {
-      new CountVectorizerModel(uid = "",
+      val countVectorizerModel = new CountVectorizerModel(uid = "",
         vocabulary = model.value("vocabulary").getStringList.toArray).
-        setBinary(model.value("binary").getBoolean).
-        setMinTF(model.value("min_tf").getDouble)
+        setBinary(model.value("binary").getBoolean)
+      model.getValue("min_tf") match {
+        case Some(value) => countVectorizerModel.setMinTF(value.getDouble)
+      }
+
+      countVectorizerModel
     }
   }
 
