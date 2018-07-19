@@ -67,6 +67,7 @@ trait ProbabilisticClassificationModel extends ClassificationModel {
   def predictProbabilities(features: Vector): Vector = {
     val raw = predictRaw(features)
     rawToProbabilityInPlace(raw)
+    raw
   }
 
   def rawToProbability(raw: Vector): Vector = {
