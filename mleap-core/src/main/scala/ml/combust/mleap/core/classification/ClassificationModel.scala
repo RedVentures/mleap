@@ -56,7 +56,8 @@ trait ProbabilisticClassificationModel extends ClassificationModel {
 
   def thresholds: Option[Array[Double]] = None
 
-  def predict(features: Vector): Double = probabilityToPrediction(predictProbabilities(features))
+  def predict(features: Vector): Double = rawToPrediction(predictRaw(features))
+
   def predictWithProbability(features: Vector): (Double, Double) = {
     val probabilities = predictProbabilities(features)
     val index = probabilityToPredictionIndex(probabilities)
@@ -66,7 +67,6 @@ trait ProbabilisticClassificationModel extends ClassificationModel {
   def predictProbabilities(features: Vector): Vector = {
     val raw = predictRaw(features)
     rawToProbabilityInPlace(raw)
-    raw
   }
 
   def rawToProbability(raw: Vector): Vector = {
@@ -88,11 +88,24 @@ trait ProbabilisticClassificationModel extends ClassificationModel {
   def probabilityToPredictionIndex(probability: Vector): Int = {
     thresholds match {
       case Some(ts) =>
-        val scaledProbability: Array[Double] =
-          probability.toArray.zip(ts).map { case (p, t) =>
-            if (t == 0.0) Double.PositiveInfinity else p / t
+
+        var argMax = 0
+        var max = Double.NegativeInfinity
+        var i = 0
+        val probabilitySize = probability.size
+        while (i < probabilitySize) {
+          // Thresholds are all > 0, excepting that at most one may be 0.
+          // The single class whose threshold is 0, if any, will always be predicted
+          // ('scaled' = +Infinity). However in the case that this class also has
+          // 0 probability, the class will not be selected ('scaled' is NaN).
+          val scaled = probability(i) / ts(i)
+          if (scaled > max) {
+            max = scaled
+            argMax = i
           }
-        Vectors.dense(scaledProbability).argmax
+          i += 1
+        }
+        argMax
       case None => probability.argmax
     }
   }

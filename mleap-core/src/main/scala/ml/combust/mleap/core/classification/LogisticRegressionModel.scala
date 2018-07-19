@@ -11,7 +11,6 @@ case class BinaryLogisticRegressionModel(coefficients: Vector,
   def margin(features: Vector): Double = {
     BLAS.dot(features, coefficients) + intercept
   }
-
   override def predict(features: Vector): Double = if(score(features) > threshold) 1.0 else 0.0
 
   override val numClasses: Int = 2
@@ -26,6 +25,19 @@ case class BinaryLogisticRegressionModel(coefficients: Vector,
     val m = margin(features)
     Vectors.dense(Array(-m, m))
   }
+
+  override def rawToPrediction(raw: Vector): Double = {
+    val rawThreshold = if (threshold == 0.0) {
+      Double.NegativeInfinity
+    } else if (threshold == 1.0) {
+      Double.PositiveInfinity
+    } else {
+      math.log(threshold / (1.0 - threshold))
+    }
+    if (raw(1) > rawThreshold) 1 else 0
+  }
+
+  override def probabilityToPrediction(probability: Vector): Double = if (probability(1) > threshold) 1 else 0
 
   override def rawToProbabilityInPlace(raw: Vector): Vector = raw match {
     case dv: DenseVector =>
@@ -108,6 +120,10 @@ case class LogisticRegressionModel(impl: AbstractLogisticRegressionModel) extend
   override def predict(features: Vector): Double = impl.predict(features)
 
   override def predictRaw(features: Vector): Vector = impl.predictRaw(features)
+
+  override def rawToPrediction(raw: Vector): Double = impl.rawToPrediction(raw)
+
+  override def probabilityToPrediction(probability: Vector): Double = impl.probabilityToPrediction(probability)
 
   override def rawToProbabilityInPlace(raw: Vector): Vector = impl.rawToProbabilityInPlace(raw)
 }
