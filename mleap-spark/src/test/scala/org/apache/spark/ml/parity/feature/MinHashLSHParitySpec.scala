@@ -16,4 +16,7 @@ class MinHashLSHParitySpec extends SparkParityBase {
     new MinHashLSH().
       setInputCol("features").
       setOutputCol("lsh_features"))).fit(dataset)
+
+  override val paramsToSkipTesting = Array("seed") ++ // only affect fitting
+   Array("numHashTables") // we load the rand coefficients array directly so we don't need this param
 }

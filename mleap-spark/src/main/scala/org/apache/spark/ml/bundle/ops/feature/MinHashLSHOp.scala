@@ -50,8 +50,4 @@ class MinHashLSHOp extends SimpleSparkOp[MinHashLSHModel] {
   override def sparkOutputs(obj: MinHashLSHModel): Seq[SimpleParamSpec] = {
     Seq("output" -> obj.outputCol)
   }
-
-  override def load(node: Node, model: MinHashLSHModel)(implicit context: BundleContext[SparkBundleContext]): MinHashLSHModel = {
-    new MinHashLSHModel(uid = node.name, randCoefficients = model.randCoefficients)
-  }
 }
