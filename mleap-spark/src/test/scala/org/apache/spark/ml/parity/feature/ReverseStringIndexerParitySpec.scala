@@ -21,4 +21,7 @@ class ReverseStringIndexerParitySpec extends SparkParityBase {
       setLabels(stringIndexer.labels)
     new Pipeline().setStages(Array(stringIndexer, reverseStringIndexer)).fit(dataset)
   }
+
+  // only affect fitting
+  override val paramsToSkipTesting = Array("stringOrderType")
 }
