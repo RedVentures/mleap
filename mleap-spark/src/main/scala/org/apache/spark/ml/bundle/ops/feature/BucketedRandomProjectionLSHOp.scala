@@ -42,8 +42,10 @@ class BucketedRandomProjectionLSHOp extends SimpleSparkOp[BucketedRandomProjecti
   }
 
   override def sparkLoad(uid: String, shape: NodeShape, model: BucketedRandomProjectionLSHModel): BucketedRandomProjectionLSHModel = {
-    new BucketedRandomProjectionLSHModel(uid = uid,
+    val m = new BucketedRandomProjectionLSHModel(uid = uid,
       randUnitVectors = model.randUnitVectors)
+    m.set(m.bucketLength, model.getBucketLength)
+    m
   }
 
   override def sparkInputs(obj: BucketedRandomProjectionLSHModel): Seq[ParamSpec] = {
@@ -52,15 +54,6 @@ class BucketedRandomProjectionLSHOp extends SimpleSparkOp[BucketedRandomProjecti
 
   override def sparkOutputs(obj: BucketedRandomProjectionLSHModel): Seq[SimpleParamSpec] = {
     Seq("output" -> obj.outputCol)
-  }
-
-  override def load(node: Node, model: BucketedRandomProjectionLSHModel)(implicit context: BundleContext[SparkBundleContext]): BucketedRandomProjectionLSHModel = {
-    val n = new BucketedRandomProjectionLSHModel(uid = node.name,
-      randUnitVectors = model.randUnitVectors)
-    n.set(n.bucketLength, model.getBucketLength)
-
-    SparkShapeLoader(node.shape, n, sparkInputs(n), sparkOutputs(n)).loadShape()
-    n
   }
 }
 

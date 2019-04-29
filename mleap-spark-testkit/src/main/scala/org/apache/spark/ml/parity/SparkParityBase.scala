@@ -59,6 +59,8 @@ abstract class SparkParityBase extends FunSpec with BeforeAndAfterAll {
   val dataset: DataFrame
   val sparkTransformer: Transformer
 
+  val paramsToSkipTesting = Array.empty[String]
+
   lazy val spark = SparkSession.builder().
     appName("Spark/MLeap Parity Tests").
     master("local[2]").
@@ -189,7 +191,9 @@ abstract class SparkParityBase extends FunSpec with BeforeAndAfterAll {
   }
 
   private def paramsTest(original: Transformer, deserialized: Transformer): Unit = {
-    getParamsToTest(original, deserialized).foreach {
+    original.params.zip(deserialized.params)
+      .filterNot(param => paramsToSkipTesting.contains(param._1.name))
+      .foreach {
       case (param1, param2) =>
         assert(original.isDefined(param1) == deserialized.isDefined(param2),
           s"spark transformer is defined ${original.isDefined(param1)} deserialized is ${deserialized.isDefined(param2)}")
@@ -207,10 +211,6 @@ abstract class SparkParityBase extends FunSpec with BeforeAndAfterAll {
           }
         }
     }
-  }
-
-  protected def getParamsToTest(original: Transformer, deserialized: Transformer): Array[(Param[_], Param[_])] = {
-    original.params.zip(deserialized.params)
   }
 
   it should behave like parityTransformer()
