@@ -32,4 +32,8 @@ class TrainValidationSplitParitySpec extends SparkParityBase {
         setEstimator(regressor).
         setEstimatorParamMaps(paramGrid))).fit(dataset)
   }
+
+  override val paramsToSkipTesting = Array("stringOrderType") ++ // only affect fitting
+    Array("estimator", "estimatorParamMaps", "evaluator", "seed", "trainRatio") // we don't serialize or reload
+  // anything related to the train validation split itself
 }
