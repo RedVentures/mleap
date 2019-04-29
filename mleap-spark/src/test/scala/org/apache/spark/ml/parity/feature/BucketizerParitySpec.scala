@@ -14,4 +14,7 @@ class BucketizerParitySpec extends SparkParityBase {
     setInputCol("loan_amount").
     setOutputCol("loan_amount_bucket").
     setSplits(Array(Double.NegativeInfinity, 1000.0, 10000.0, Double.PositiveInfinity))
+
+  //TODO support handle invalid in mleap for bucketizer
+  override val paramsToSkipTesting = Array("handleInvalid")
 }
