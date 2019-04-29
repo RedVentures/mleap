@@ -18,7 +18,6 @@ import org.apache.spark.ml.bundle.SparkBundleContext
 import ml.combust.mleap.spark.SparkSupport._
 import ml.combust.mleap.runtime.transformer.Pipeline
 import org.apache.spark.ml
-import org.apache.spark.ml.param.Param
 import resource._
 
 /**
