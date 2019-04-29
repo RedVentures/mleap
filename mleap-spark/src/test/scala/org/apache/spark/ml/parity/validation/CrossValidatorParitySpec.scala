@@ -32,4 +32,8 @@ class CrossValidatorParitySpec extends SparkParityBase {
         setEstimator(regressor).
         setEstimatorParamMaps(paramGrid))).fit(dataset)
   }
+
+  override val paramsToSkipTesting = Array("stringOrderType") ++ // only affect fitting
+    Array("estimator", "estimatorParamMaps", "evaluator", "numFolds", "seed") // we don't serialize or reload
+    // anything related to the cross validator itself
 }
