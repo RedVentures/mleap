@@ -20,7 +20,6 @@ class VectorIndexerParitySpec extends SparkParityBase {
       setInputCol("features").
       setOutputCol("scaled_features"))).fit(dataset)
 
-  // only affect fitting
-  // TODO add support for handleInvalid for vector indexer in mleap
-  override val paramsToSkipTesting = Array("stringOrderType", "maxCategories", "handleInvalid")
+  override val paramsToSkipTesting = Array("stringOrderType", "maxCategories") ++  // only affect fitting
+    Array("handleInvalid") // TODO add support for handleInvalid for vector indexer in mleap
 }
