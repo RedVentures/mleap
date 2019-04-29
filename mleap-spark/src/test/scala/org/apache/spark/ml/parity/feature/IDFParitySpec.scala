@@ -16,4 +16,7 @@ class IDFParitySpec extends SparkParityBase {
     new IDF().
       setInputCol("features").
       setOutputCol("idf_features"))).fit(dataset)
+
+  //only affect fitting
+  override val paramsToSkipTesting = Array("minDocFreq")
 }
