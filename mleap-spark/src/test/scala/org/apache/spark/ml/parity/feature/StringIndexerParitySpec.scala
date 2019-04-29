@@ -17,5 +17,6 @@ class StringIndexerParitySpec extends SparkParityBase {
     setOutputCol("state_index").setHandleInvalid("keep").
     fit(dataset)
 
+  //only affect fitting
   override val paramsToSkipTesting = Array("stringOrderType")
 }

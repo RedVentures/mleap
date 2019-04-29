@@ -199,7 +199,6 @@ abstract class SparkParityBase extends FunSpec with BeforeAndAfterAll {
           s"spark transformer is defined ${original.isDefined(param1)} deserialized is ${deserialized.isDefined(param2)}")
 
         if (original.isDefined(param1)) {
-          println("here " + param1.name)
           val v1Value = original.getOrDefault(param1)
           val v2Value = deserialized.getOrDefault(param1)
 

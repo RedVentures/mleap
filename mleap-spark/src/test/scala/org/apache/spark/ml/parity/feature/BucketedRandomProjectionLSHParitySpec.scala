@@ -17,6 +17,4 @@ class BucketedRandomProjectionLSHParitySpec extends SparkParityBase {
       setInputCol("features").
       setBucketLength(2).
       setOutputCol("lsh_features"))).fit(dataset)
-
-  override val paramsToSkipTesting = Array("seed", "numHashTables")
 }
