@@ -18,4 +18,6 @@ class IsotonicRegressionParitySpec extends SparkParityBase {
       setFeaturesCol("dti").
       setLabelCol("loan_amount").
       setPredictionCol("prediction"))).fit(dataset)
+
+  override val paramsToSkipTesting = Array("labelCol")
 }
