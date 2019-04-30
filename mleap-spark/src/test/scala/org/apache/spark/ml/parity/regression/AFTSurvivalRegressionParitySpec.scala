@@ -26,4 +26,7 @@ class AFTSurvivalRegressionParitySpec extends SparkParityBase {
       setLabelCol("loan_amount").
       setQuantilesCol("quant").
       setPredictionCol("prediction"))).fit(dataset)
+
+  // only affect fitting
+  override val paramsToSkipTesting = Array("stringOrderType", "labelCol", "maxIter", "tol")
 }
