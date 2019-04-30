@@ -16,7 +16,4 @@ class CountVectorizerParitySpec extends SparkParityBase {
     new CountVectorizer().
       setInputCol("loan_title_tokens").
       setOutputCol("loan_title_token_counts"))).fit(dataset)
-
-  //only affect fitting
-  override val paramsToSkipTesting = Array("vocabSize", "minDF")
 }
