@@ -21,4 +21,7 @@ class RandomForestRegressionParitySpec extends SparkParityBase {
       setFeaturesCol("features").
       setLabelCol("loan_amount").
       setPredictionCol("prediction"))).fit(dataset)
+
+  // only affect training
+  override val paramsToSkipTesting = Array("stringOrderType", "labelCol", "seed")
 }
