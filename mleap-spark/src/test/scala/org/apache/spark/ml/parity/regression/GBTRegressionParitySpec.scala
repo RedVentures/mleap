@@ -21,4 +21,7 @@ class GBTRegressionParitySpec extends SparkParityBase {
       setFeaturesCol("features").
       setLabelCol("loan_amount").
       setPredictionCol("prediction"))).fit(dataset)
+
+  // only affect fitting
+  override val paramsToSkipTesting = Array("stringOrderType", "labelCol", "seed")
 }
