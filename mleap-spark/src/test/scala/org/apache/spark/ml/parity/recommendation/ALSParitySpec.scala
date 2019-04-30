@@ -19,6 +19,7 @@ class ALSParitySpec extends SparkParityBase {
   override def equalityTest(sparkDataset: DataFrame, mleapDataset: DataFrame): Unit =
     super.equalityTest(sparkDataset.orderBy("userId", "movieId"), mleapDataset.orderBy("userId", "movieId"))
 
+  //TODO should this be serialized?
   override val paramsToSkipTesting = Array("coldStartStrategy")
 
 }
