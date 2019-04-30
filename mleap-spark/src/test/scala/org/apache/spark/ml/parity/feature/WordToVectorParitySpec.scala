@@ -14,11 +14,9 @@ class WordToVectorParitySpec extends SparkParityBase {
     setInputCol("loan_title").
     setOutputCol("loan_title_tokens"),
     new Word2Vec(uid = "words").
-      setInputCol("loan_title_tokens").setVectorSize(1234)
+      setInputCol("loan_title_tokens")
       setOutputCol("loan_title_token_counts"))).fit(dataset)
 
   // only affect fitting
-  override val paramsToSkipTesting = Array("maxSentenceLength", "maxIter", "seed",
-    "minCount", "numPartitions", "stepSize")
-
+  override val paramsToSkipTesting = Array("seed")
 }
