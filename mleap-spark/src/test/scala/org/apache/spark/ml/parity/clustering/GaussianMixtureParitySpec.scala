@@ -23,4 +23,6 @@ class GaussianMixtureParitySpec extends SparkParityBase {
       setFeaturesCol("features").
       setPredictionCol("prediction").
       setProbabilityCol("probability"))).fit(dataset)
+
+  override val paramsToSkipTesting = Array("stringOrderType", "k", "maxIter", "seed", "tol")
 }
