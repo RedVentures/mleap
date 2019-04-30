@@ -20,4 +20,7 @@ class BisectingKMeansParitySpec extends SparkParityBase {
       new BisectingKMeans().
         setFeaturesCol("features").
         setPredictionCol("prediction"))).fit(dataset)
+
+  //only affect fitting
+  override val paramsToSkipTesting = Array("stringOrderType", "k", "maxIter", "minDivisibleClusterSize", "seed")
   }
