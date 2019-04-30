@@ -21,4 +21,7 @@ class DecisionTreeRegressionParitySpec extends SparkParityBase {
       setFeaturesCol("features").
       setLabelCol("loan_amount").
       setPredictionCol("prediction"))).fit(dataset)
+
+  // only affect fittings
+  override val paramsToSkipTesting = Array("stringOrderType", "labelCol", "seed")
 }
