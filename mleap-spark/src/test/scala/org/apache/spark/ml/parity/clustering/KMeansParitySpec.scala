@@ -20,4 +20,7 @@ class KMeansParitySpec extends SparkParityBase {
     new KMeans().
       setFeaturesCol("features").
       setPredictionCol("prediction"))).fit(dataset)
+
+  // only affect fitting
+  override val paramsToSkipTesting = Array("stringOrderType", "initMode", "initSteps", "k", "maxIter", "seed", "tol")
 }
