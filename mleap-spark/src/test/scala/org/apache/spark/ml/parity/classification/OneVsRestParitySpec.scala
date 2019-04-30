@@ -21,4 +21,7 @@ class OneVsRestParitySpec extends SparkParityBase {
       setLabelCol("fico_index").
       setFeaturesCol("features").
       setPredictionCol("prediction"))).fit(dataset)
+
+  // only affect fitting, we serialize the classification models
+  override val paramsToSkipTesting = Array("stringOrderType", "classifier", "labelCol")
 }
