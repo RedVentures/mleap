@@ -23,4 +23,6 @@ class RandomForestClassifierParitySpec extends SparkParityBase {
     new RandomForestClassifier().
       setFeaturesCol("features").
       setLabelCol("label"))).fit(dataset)
+
+  override val paramsToSkipTesting = Array("stringOrderType", "seed")
 }
