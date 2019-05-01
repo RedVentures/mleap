@@ -24,5 +24,9 @@ class NaiveBayesClassifierParitySpec extends SparkParityBase {
     new NaiveBayes(uid = "nb").
       setModelType("multinomial").
       setFeaturesCol("features").
+      setProbabilityCol("testy").
       setLabelCol("label"))).fit(dataset)
+
+  override val paramsToSkipTesting = Array("stringOrderType", "smoothing", "labelCol")
+
 }

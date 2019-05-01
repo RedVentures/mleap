@@ -19,11 +19,16 @@ class NaiveBayesClassifierOp extends SimpleSparkOp[NaiveBayesModel] {
 
     override def store(model: Model, obj: NaiveBayesModel)
                       (implicit context: BundleContext[SparkBundleContext]): Model = {
+      val thresholds = if(obj.isSet(obj.thresholds)) {
+        Some(obj.getThresholds)
+      } else None
+
       model.withValue("num_features", Value.long(obj.numFeatures)).
         withValue("num_classes", Value.long(obj.numClasses)).
         withValue("pi", Value.vector(obj.pi.toArray)).
         withValue("theta", Value.tensor(DenseTensor(obj.theta.toArray, Seq(obj.theta.numRows, obj.theta.numCols)))).
         withValue("model_type", Value.string(obj.getModelType))
+        .withValue("thresholds", thresholds.map(_.toSeq).map(Value.doubleList))
     }
 
     override def load(model: Model)
@@ -34,6 +39,9 @@ class NaiveBayesClassifierOp extends SimpleSparkOp[NaiveBayesModel] {
         theta = Matrices.dense(theta.dimensions.head, theta.dimensions(1), theta.toArray))
       val modelType = model.value("model_type").getString
       nb.set(nb.modelType, modelType)
+      model.getValue("thresholds").
+        map(t => nb.setThresholds(t.getDoubleList.toArray)).
+        getOrElse(nb)
     }
 
   }
