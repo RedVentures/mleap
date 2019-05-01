@@ -28,4 +28,6 @@ class GBTClassifierParitySpec extends SparkParityBase {
       setPredictionCol("myPrediction").
       setRawPredictionCol("myRawPrediction")
   )).fit(dataset)
+
+  override val paramsToSkipTesting = Array("stringOrderType", "seed")
 }
